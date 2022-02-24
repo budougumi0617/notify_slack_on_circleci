@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   slack: circleci/slack@3.4.1
 jobs:
-  announcer:
+  announcer: # helper job
     parameters:
       message:
         description: the slack message
@@ -32,7 +32,7 @@ jobs:
     steps:
       - slack/notify:
           message: "OK!"
-      - slack/status:
+      - slack/status: # never notify
           fail_only: true
 
 workflows:
