@@ -25,7 +25,7 @@ jobs:
     steps:
       - run: exit 1
       - slack/status:
-        fail_only: true
+          fail_only: true
   sandbox2:
     executor:
       name: slack/alpine
@@ -33,7 +33,7 @@ jobs:
       - slack/notify:
           message: "OK!"
       - slack/status:
-        fail_only: true
+          fail_only: true
 
 workflows:
   version: 2
@@ -51,8 +51,8 @@ workflows:
             - sandbox
             - sandbox2
       - slack/approval-notification:
-          message: 'approve to finish workflow'
-          mentions: 'here'
+          message: "approve to finish workflow"
+          mentions: "here"
           requires:
             - clear-sandboxes
       - approve-flow:
