@@ -44,6 +44,7 @@ workflows:
           message: "start workflow!"
       - sandbox
       - sandbox2
+      - failer
       - announcer:
           name: clear-sandboxes
           message: "ok sandbox!!"
@@ -61,5 +62,6 @@ workflows:
             - slack/approval-notification
       - announcer:
           name: finish-message
+          message: "complete workflow!"
           requires:
             - approve-flow
