@@ -1,24 +1,65 @@
 version: 2.1
 orbs:
   slack: circleci/slack@3.4.1
-
 jobs:
+  announcer:
+    parameters:
+      message:
+        description: the slack message
+        default: "start!!"
+        type: string
+    executor:
+      name: slack/alpine
+    steps:
+      - slack/notify:
+          message: "<< parameters.message >>"
   sandbox:
     executor:
       name: slack/alpine
     steps:
       - slack/notify:
           message: "Hello, world"
+  failer:
+    executor:
+      name: slack/alpine
+    steps:
+      - run: exit 1
+      - slack/status:
+        fail_only: true
   sandbox2:
     executor:
       name: slack/alpine
     steps:
       - slack/notify:
           message: "OK!"
+      - slack/status:
+        fail_only: true
 
 workflows:
   version: 2
   workflow-test:
     jobs:
+      - announcer:
+          name: start-workflow
+          message: "start workflow!"
       - sandbox
       - sandbox2
+      - announcer:
+          name: clear-sandboxes
+          message: "ok sandbox!!"
+          requires:
+            - sandbox
+            - sandbox2
+      - slack/approval-notification:
+          message: 'approve to finish workflow'
+          mentions: 'here'
+          requires:
+            - clear-sandboxes
+      - approve-flow:
+          type: approval
+          requires:
+            - slack/approval-notification
+      - announcer:
+          name: finish-message
+          requires:
+            - approve-flow
