@@ -42,12 +42,15 @@ workflows:
       - announcer:
           name: start-workflow
           message: "start workflow!"
-      - sandbox
-          requires: start-workflow
-      - sandbox2
-          requires: start-workflow
-      - failer
-          requires: start-workflow
+      - sandbox:
+          requires:
+            - start-workflow
+      - sandbox2:
+          requires:
+            - start-workflow
+      - failer:
+          requires:
+            - start-workflow
       - announcer:
           name: clear-sandboxes
           message: "ok previous steps!!"
