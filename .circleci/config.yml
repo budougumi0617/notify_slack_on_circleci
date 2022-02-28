@@ -13,6 +13,11 @@ jobs:
     steps:
       - slack/notify:
           message: "<< parameters.message >>"
+  successor:
+    executor:
+      name: slack/alpine
+    steps:
+      - slack/status
   sandbox:
     executor:
       name: slack/alpine
@@ -48,6 +53,10 @@ workflows:
       - sandbox2:
           requires:
             - start-workflow
+      - successor:
+          name: complete-sandbox
+          requires:
+            - sandbox
       - failer:
           requires:
             - start-workflow
